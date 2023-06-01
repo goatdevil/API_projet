@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/recommandation.css">
+    <title>Recommandation d'hôtel</title>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-section">
+            <img src="https://static.tacdn.com/img2/brand/home/homemar2022_mw_trans@2x.webp" alt="">
+            <h2>Welcome to your profile{{ username }}</h2>
+        </div>
+        <div class="commentes">
+            <h3>Hotels reviewed :</h3>
+            <select class="hotel-dropdown">
+                <option value="">Select a hotel</option>
+                {% for hotel_commente in hotels_commentes %}
+                <option>{{ hotel_commente }}</option>
+                {% endfor %}
+            </select>
+            
+        </div>
+        <div class="commentaire-zone">
+            <h3>Comment:</h3>
+            <p id="commentaire"></p>
+        </div>
+        
+
+
+        <div class="recommandes" id="recommandations-section">
+            <h3>Recommended hotels :</h3>
+            <ul>
+                {% for hotel_recommande in recommendation %}
+                <li>{{ hotel_recommande }}</li>
+                    <li>{{ dico_hotel_adresse[hotel_recommande] }}</li>
+                    <br>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="logout">
+            <a href="/logout">logout</a>
+        </div>
+        <div class="ajouter-commentaire">
+            <a href="/ajouter-commentaire">Add a new comment</a>
+        </div>
+    </div>
+
+    <script>
+            var dropdown = document.querySelector('.hotel-dropdown');
+            var commentaireParagraphe = document.getElementById('commentaire');
+            var recommandationSection=document.getElementById('recommandations-section');
+
+            dropdown.addEventListener('change', function() {
+                var selectedHotel = dropdown.value;
+                var commentaires = {
+                    {% for hotel, commentaire in commentaires.items() %}
+                    "{{ hotel }}": "{{ commentaire }}",
+                    {% endfor %}
+                };
+
+                commentaireParagraphe.textContent = commentaires[selectedHotel] || "";
+                console.log(selectedHotel);
+                if (selectedHotel !== "" && selectedHotel !== null) {
+                    recommandationSection.style.display = "block";
+                    console.log("OK");
+                }
+            });
+        </script>
+    <script>
+        // Récupérer la valeur de l'option sélectionnée précédemment
+        var hotelSelectionne = "{{ hotel_selectionne }}";
+
+        // Sélectionner l'option correspondante dans la liste déroulante
+        if (hotelSelectionne) {
+            var selectElement = document.getElementById("hotel");
+            for (var i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value === hotelSelectionne) {
+                    selectElement.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
